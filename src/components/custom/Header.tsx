@@ -6,12 +6,12 @@ import {
   CurrencyPoundIcon,
   LogoutIcon,
 } from '@heroicons/react/solid'
-import { Menu, Transition } from '@headlessui/react'
 import {
   MeDocument,
   useGetUserBalancesQuery,
   useLogoutMutation,
 } from '../../generated/graphql'
+import { Menu, Transition } from '@headlessui/react'
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
