@@ -11,9 +11,7 @@ import {
   MeDocument,
   useGetUserBalancesQuery,
   useLogoutMutation,
-  useMeQuery,
 } from '../../generated/graphql'
-import { RedirectPage } from '../../helpers/redirectPage'
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
