@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { LockClosedIcon } from '@heroicons/react/solid'
 import { Form, Formik } from 'formik'
 import Link from 'next/link'
