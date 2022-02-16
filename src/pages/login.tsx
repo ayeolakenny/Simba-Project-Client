@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { LockClosedIcon } from '@heroicons/react/solid'
 import { Form, Formik } from 'formik'
 import Link from 'next/link'
@@ -5,25 +6,36 @@ import * as yup from 'yup'
 import { useRouter } from 'next/router'
 
 import { InputField } from '../components/custom/InputField'
-import { MeDocument, useMeQuery, useSignupMutation } from '../generated/graphql'
+import {
+  GetUserBalancesDocument,
+  MeDocument,
+  useLoginMutation,
+  useMeQuery,
+} from '../generated/graphql'
 import { toErrorMap } from '../utils/toErrorMap'
 import { RedirectPage } from '../helpers/redirectPage'
 
-const Register = () => {
+const Login = () => {
   const router = useRouter()
   const { data: loggedInUser } = useMeQuery()
 
   if (loggedInUser?.me) RedirectPage('/overview')
 
-  const [signup] = useSignupMutation({
-    refetchQueries: [{ query: MeDocument }],
+  const [login] = useLoginMutation({
+    refetchQueries: [
+      { query: MeDocument },
+      {
+        query: GetUserBalancesDocument,
+      },
+    ],
   })
 
   const validationSchema = yup.object({
-    name: yup.string().required('name is required'),
     email: yup.string().required('email is required'),
     password: yup.string().required('password is required'),
   })
+
+  const [loginError, setLoginError] = useState<string>('')
 
   return (
     <>
@@ -42,7 +54,6 @@ const Register = () => {
           <Formik
             validateOnChange={true}
             initialValues={{
-              name: '',
               email: '',
               password: '',
             }}
@@ -50,14 +61,20 @@ const Register = () => {
             onSubmit={async (values, { setSubmitting, setErrors }) => {
               setSubmitting(true)
               try {
-                await signup({
+                await login({
                   variables: {
                     ...values,
                   },
                 })
                 router.push('/overview')
               } catch (err: any) {
-                setErrors(toErrorMap(err.graphQLErrors[0].message))
+                const errorObj = err.graphQLErrors[0]
+                const errCheck = errorObj.message[0].toString().split(' ')[0]
+                if (errCheck !== 'email' || errCheck !== 'password') {
+                  setLoginError(errorObj.message[0])
+                } else {
+                  setErrors(toErrorMap(err.graphQLErrors[0].message))
+                }
               }
               setSubmitting(false)
             }}
@@ -66,14 +83,6 @@ const Register = () => {
               <Form>
                 <div className="mt-8 space-y-6">
                   <div className="space-y-1 rounded-md shadow-sm">
-                    <div>
-                      <InputField
-                        name="name"
-                        placeholder="name"
-                        label="Name"
-                        type="text"
-                      />
-                    </div>
                     <div>
                       <InputField
                         name="email"
@@ -90,7 +99,13 @@ const Register = () => {
                         type="password"
                       />
                     </div>
+                    <div className="flex justify-center">
+                      {loginError && (
+                        <small className="text-red-500">{loginError}</small>
+                      )}
+                    </div>
                   </div>
+
                   <div>
                     <button
                       type="submit"
@@ -105,13 +120,13 @@ const Register = () => {
                       {isSubmitting ? (
                         <span className="loader mr-3"></span>
                       ) : (
-                        <span>Sign up</span>
+                        <span>Sign In</span>
                       )}
                     </button>
                     <small className="cursor-pointer justify-center">
-                      Already have an account?{' '}
-                      <Link href="/login">
-                        <span className="text-indigo-600">Sign In</span>
+                      Don't have an account?{' '}
+                      <Link href="/register">
+                        <span className="text-indigo-600">Sign Up</span>
                       </Link>
                     </small>
                   </div>
@@ -125,4 +140,4 @@ const Register = () => {
   )
 }
 
-export default Register
+export default Login

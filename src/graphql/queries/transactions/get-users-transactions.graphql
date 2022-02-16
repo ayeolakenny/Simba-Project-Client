@@ -1,0 +1,21 @@
+query GetUserTransactions {
+  getUserTransactions {
+    id
+    senderId
+    recieverId
+    reciever {
+      name
+      email
+    }
+    sender {
+      name
+      email
+    }
+    amount
+    sourceCurrency
+    targetCurrency
+    status
+    createdAt
+    updatedAt
+  }
+}

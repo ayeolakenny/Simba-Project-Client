@@ -1,0 +1,5 @@
+query FindUserByEmail($email: String!) {
+  findUserByEmail(email: $email) {
+    ...User
+  }
+}

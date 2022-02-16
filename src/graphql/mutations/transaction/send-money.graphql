@@ -1,0 +1,19 @@
+mutation SendMoney(
+  $senderId: Int!
+  $recieverEmail: String!
+  $amount: Int!
+  $sourceCurrency: String!
+  $targetCurrency: String!
+  $exchangeRate: Float!
+) {
+  sendMoney(
+    input: {
+      senderId: $senderId
+      recieverEmail: $recieverEmail
+      amount: $amount
+      sourceCurrency: $sourceCurrency
+      targetCurrency: $targetCurrency
+      exchangeRate: $exchangeRate
+    }
+  )
+}
