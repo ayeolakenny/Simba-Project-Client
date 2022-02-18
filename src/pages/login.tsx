@@ -8,6 +8,7 @@ import { useRouter } from 'next/router'
 import { InputField } from '../components/custom/InputField'
 import {
   GetUserBalancesDocument,
+  GetUserTransactionsDocument,
   MeDocument,
   useLoginMutation,
   useMeQuery,
@@ -19,6 +20,8 @@ const Login = () => {
   const router = useRouter()
   const { data: loggedInUser } = useMeQuery()
 
+  console.log('Overview:', loggedInUser)
+
   if (loggedInUser?.me) RedirectPage('/overview')
 
   const [login] = useLoginMutation({
@@ -26,6 +29,9 @@ const Login = () => {
       { query: MeDocument },
       {
         query: GetUserBalancesDocument,
+      },
+      {
+        query: GetUserTransactionsDocument,
       },
     ],
   })

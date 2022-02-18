@@ -7,12 +7,14 @@ import { Header } from '../components/custom/Header'
 
 const Overview = () => {
   const { data: loggedInUser } = useMeQuery()
+  console.log('Overview:', loggedInUser)
 
   if (!loggedInUser?.me) RedirectPage('/login')
 
   const { data: getUserTrasactions } = useGetUserTransactionsQuery()
 
   const transactions = getUserTrasactions?.getUserTransactions
+
   return (
     <>
       <Header />
