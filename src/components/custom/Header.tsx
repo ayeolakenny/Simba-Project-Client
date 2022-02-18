@@ -1,6 +1,4 @@
-import { Fragment } from 'react'
 import {
-  ChevronDownIcon,
   CurrencyDollarIcon,
   CurrencyEuroIcon,
   CurrencyPoundIcon,
@@ -11,11 +9,6 @@ import {
   useGetUserBalancesQuery,
   useLogoutMutation,
 } from '../../generated/graphql'
-import { Menu, Transition } from '@headlessui/react'
-
-function classNames(...classes: any) {
-  return classes.filter(Boolean).join(' ')
-}
 
 export const Header = () => {
   const [logout] = useLogoutMutation({
